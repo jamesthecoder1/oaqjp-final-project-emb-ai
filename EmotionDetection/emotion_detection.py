@@ -10,31 +10,53 @@ def emotion_detector(text_to_analyze):
     myobj = { "raw_document": { "text": text_to_analyze } }
     # Set how responses are received
     response = requests.post(url, json=myobj, headers=headers)
-    # Convert response to JSON
-    formatted_response = json.loads(response.text)
     
-    # Extract emotions and score from response
-    emotions = formatted_response['emotionPredictions'][0]['emotion']
+    if response.status_code == 200:
+        # Convert response to JSON
+        formatted_response = json.loads(response.text)
+    
+        # Extract emotions and score from response
+        emotions = formatted_response['emotionPredictions'][0]['emotion']
 
-    # Get scores from emotions listed
-    anger_score = emotions['anger']
-    disgust_score = emotions['disgust']
-    fear_score = emotions['fear']
-    joy_score = emotions['joy']
-    sadness_score = emotions['sadness']
+        # Get scores from emotions listed
+        anger_score = emotions['anger']
+        disgust_score = emotions['disgust']
+        fear_score = emotions['fear']
+        joy_score = emotions['joy']
+        sadness_score = emotions['sadness']
 
-    # Get dominant emotion
-    dominant_emotion = max(emotions, key=emotions.get)
+        # Get dominant emotion
+        dominant_emotion = max(emotions, key=emotions.get)
 
-    # Retrieve data from formatted response
-    result = {
-        'anger': anger_score,
-        'disgust': disgust_score,
-        'fear': fear_score,
-        'joy': joy_score,
-        'sadness': sadness_score,
-        'dominant_emotion': dominant_emotion
-    }
+        # Retrieve data from formatted response
+        result = {
+            'anger': anger_score,
+            'disgust': disgust_score,
+            'fear': fear_score,
+            'joy': joy_score,
+            'sadness': sadness_score,
+            'dominant_emotion': dominant_emotion
+        }
 
-    # Return result
+    elif response.status_code == 400:
+        result = {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None
+        }
+        
+    else:
+        result = {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None
+        }
+    
+    # Return response
     return result
