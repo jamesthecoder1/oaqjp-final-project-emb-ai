@@ -1,13 +1,7 @@
 # Importing needed modules
-from flask import Flask
 import requests
 import json
 
-# Run Flask
-app = Flask("EmotionDetector")
-
-# Set route
-@app.route('/emotion_detection')
 # Define emotion detector function
 def emotion_detector(text_to_analyze):
     # Set url, headers, and input
